@@ -90,11 +90,13 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount.providers.baidu",
     "sorl.thumbnail",
     "compressor",
+    "taggit",
 ]
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 LOCAL_APPS = [
     "zanhu.users",
     "zanhu.news",
+    "zanhu.articles",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
