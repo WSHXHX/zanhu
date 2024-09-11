@@ -27,12 +27,10 @@
             <div class="question-info options">
                 <h3 class="{% if question.has_answer %}bg-success text-white{% endif %}">{{ question.count_answers }}</h3>
                 <small class="text-secondary">回答</small>
-                <i id="questionUpVote" class="fa fa-chevron-up vote up-vote question-vote{% if request.user in question.get_upvoters %} vote
-                d{% endif %}"
+                <i id="questionUpVote" class="fa fa-chevron-up vote up-vote question-vote{% if request.user in question.get_upvoters %} voted{% endif %}"
                    aria-hidden="true" title="单击赞同，再次点击取消"></i>
                 <h3 id="questionVotes">{{ question.total_votes }}</h3>
-                <i id="questionDownVote" class="fa fa-chevron-down vote down-vote question-vote{% if request.user in question.get_downvoters %} voted
-{% endif %}" aria-hidden="true" title="单击反对，再次点击取消"></i>
+                <i id="questionDownVote" class="fa fa-chevron-down vote down-vote question-vote{% if request.user in question.get_downvoters %} voted{% endif %}" aria-hidden="true" title="单击反对，再次点击取消"></i>
                 <small class="text-secondary">投票</small>
             </div>
         </div>

@@ -79,6 +79,7 @@ DJANGO_APPS = [
     "django.forms",
 ]
 THIRD_PARTY_APPS = [
+    "channels",
     "django_celery_beat",
     "crispy_forms",
     "crispy_bootstrap5",
@@ -91,17 +92,21 @@ THIRD_PARTY_APPS = [
     "sorl.thumbnail",
     "compressor",
     "taggit",
+    "markdownx",
+    "django_comments",
 ]
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 LOCAL_APPS = [
     "zanhu.users",
     "zanhu.news",
     "zanhu.articles",
+    "zanhu.qa",
+    "zanhu.messager",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
-
+FROM_RENDERER = "django.forms.renderers.TemplatesSetting"
 # MIGRATIONS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#migration-modules
@@ -236,7 +241,7 @@ FIXTURE_DIRS = (str(APPS_DIR / "fixtures"),)
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-httponly
 SESSION_COOKIE_HTTPONLY = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-httponly
-CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = False # 默认为False，如果设置为True，Js将获取不到cookie
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
 X_FRAME_OPTIONS = "DENY"
 
@@ -328,3 +333,17 @@ ACCOUNT_ADAPTER = "zanhu.users.adapters.AccountAdapter"
 ACCOUNT_FORMS = {"signup": "zanhu.users.forms.UserSignupForm"}
 # https://docs.allauth.org/en/latest/socialaccount/configuration.html
 SOCIALACCOUNT_ADAPTER = "zanhu.users.adapters.SocialAccountAdapter"
+
+# channels ASGI
+ASGI_APPLICATION = 'config.routing.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [f'{env("REDIS_URL", default="redis://127.0.0.1:6379")}/3', ],  # channels缓存通道使用Redis 3
+        },
+    }
+}
+
+

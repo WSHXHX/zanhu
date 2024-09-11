@@ -9,18 +9,19 @@ from django.views.generic import TemplateView
 from zanhu.news.views import NewsListView
 
 urlpatterns = [
+    # home
     path("", NewsListView.as_view(), name="home"),
-    path(
-        "about/",
-        TemplateView.as_view(template_name="pages/about.html"),
-        name="about",
-    ),
     # User management
     path("users/", include("zanhu.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
     path("news/", include("zanhu.news.urls", namespace="news")),
+    path("articles/", include("zanhu.articles.urls", namespace="articles")),
+    path("qa/", include("zanhu.qa.urls", namespace="qa")),
+    path('messages/', include('messager.urls', namespace='messages')),
     # ...
+    path('markdownx/', include('markdownx.urls')),
+    path(r'comments/', include('django_comments.urls')),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]

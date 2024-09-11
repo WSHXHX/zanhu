@@ -2,10 +2,12 @@ from django.conf import settings
 from django.db import models
 from slugify import slugify
 from taggit.managers import TaggableManager
+from markdownx.models import MarkdownxField
+from markdownx.utils import markdownify
 # Create your models here.
 
 class ArticleQuerySet(models.query.QuerySet):
-    
+
     def get_published(self):
         """获取已发表的文章"""
         return self.filter(status="P")
@@ -23,7 +25,7 @@ class ArticleQuerySet(models.query.QuerySet):
                 if tag not in tag_dict:
                     tag_dict[tag] = 1
                 else:
-                    tag_dict += 1
+                    tag_dict[tag] += 1
         return tag_dict.items()
 
 
@@ -37,7 +39,7 @@ class Article(models.Model):
     image = models.ImageField(upload_to="articles_pictures/%Y/%m/%d/", verbose_name="文章图片")
     slug = models.CharField(max_length=255, verbose_name="（URL）别名")
     status = models.CharField(max_length=1, choices=STATUS, default="D", verbose_name="状态")
-    content = models.TextField(verbose_name="文章的内容")
+    content = MarkdownxField(verbose_name="文章的内容")
     edited = models.BooleanField(default=False, verbose_name="是否可编辑")
     tags = TaggableManager(help_text="多个标签使用英文逗号隔开(,)", verbose_name="标签")
 
@@ -57,5 +59,7 @@ class Article(models.Model):
     def save(self, force_insert=False, force_upload=False, using=None, update_fields=None):
         self.slug = slugify(self.title)
         super(Article, self).save()
-    
+
+    def get_markdown(self):
+        return markdownify(self.content)
 

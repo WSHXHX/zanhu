@@ -4,7 +4,7 @@ from test_plus.test import TestCase
 from zanhu.news.models import News
 
 class TestNewsViewsCase(TestCase):
-    
+
     def setUp(self):
         self.user = self.make_user("user01")
         self.other_user = self.make_user("user02")
