@@ -1,17 +1,19 @@
 from django.urls import path
+from django.core.asgi import get_asgi_application
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 
 from zanhu.messager.consumers import MessagesConsumer
-# from zanhu.notifications.consumers import NotificationsConsumer
+from zanhu.notifications.consumers import NotificationsConsumer
 
 application = ProtocolTypeRouter({
+    'http': get_asgi_application(),
     "websocket": AllowedHostsOriginValidator(
         AuthMiddlewareStack(
             URLRouter([
-                # path('ws/notifications/', NotificationsConsumer),
-                path('ws/<username>/', MessagesConsumer),
+                path('ws/notifications/', NotificationsConsumer.as_asgi()),
+                path('ws/<username>/', MessagesConsumer.as_asgi()),
             ])
         ),
     ),

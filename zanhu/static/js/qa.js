@@ -70,7 +70,10 @@ $(function () {
             cache: false,
             success: function (data) {
                 $('.vote', span).removeClass('voted');
-                if (vote === "U") {
+                if ($(span).hasClass("voted")) {
+                    $(span).removeClass('voted');
+                } else {
+                    $(`div[question-id='${question}'] .vote`).removeClass('voted');
                     $(span).addClass('voted');
                 }
                 $("#questionVotes").text(data.votes);
@@ -98,10 +101,13 @@ $(function () {
             cache: false,
             success: function (data) {
                 $('.vote', span).removeClass('voted');
-                if (vote === "U") {
+                if ($(span).hasClass("voted")) {
+                    $(span).removeClass('voted');
+                } else {
+                    $(`div[answer-id='${answer}'] .vote`).removeClass('voted');
                     $(span).addClass('voted');
                 }
-                $("#answerVotes").text(data.votes);
+                $(`div[answer-id='${answer}'] #answerVotes`).text(data.votes);
             }
         });
     });
@@ -122,6 +128,8 @@ $(function () {
                 $("#acceptAnswer").prop("title", "点击接受回答");
                 $("#acceptAnswer").addClass("accepted");
                 $("#acceptAnswer").prop("title", "该回答已被采纳");
+                $("h3:first").addClass("bg-success");
+                $("h3:first").addClass("text-white");
             }
         });
     });

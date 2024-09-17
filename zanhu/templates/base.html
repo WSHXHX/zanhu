@@ -29,7 +29,7 @@
 {% csrf_token %}
 <nav class="navbar fixed-top navbar-expand-sm bg-light">
     <div class="container">
-        {% comment %} <a class="navbar-brand" href="{% url 'news:list' %}">赞 乎&nbsp;&nbsp;</a> {% endcomment %}
+        <a class="navbar-brand" href="{% url 'news:list' %}">赞 乎&nbsp;&nbsp;</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu"
                 aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -39,7 +39,7 @@
 
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="btn-sm" href="#" id="notifications" data-toggle="popover" data-title="通知">
+                    <a class="btn-sm" href="notifications:latest_notifications" id="notifications" data-toggle="popover" data-title="通知">
                         <i class="fa fa-bell-o" aria-hidden="true"></i>
                     </a>
                 </li>

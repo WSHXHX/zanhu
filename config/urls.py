@@ -19,6 +19,7 @@ urlpatterns = [
     path("articles/", include("zanhu.articles.urls", namespace="articles")),
     path("qa/", include("zanhu.qa.urls", namespace="qa")),
     path('messages/', include('messager.urls', namespace='messages')),
+    path('notifications/', include('notifications.urls', namespace='notifications')),
     # ...
     path('markdownx/', include('markdownx.urls')),
     path(r'comments/', include('django_comments.urls')),
