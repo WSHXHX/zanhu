@@ -1,7 +1,9 @@
 import uuid
 from django.db import models
 from django.conf import settings
-
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+from zanhu.notifications.views import notification_handler
 # Create your models here.
 
 
@@ -27,6 +29,18 @@ class News(models.Model):
     def __str__(self):
         return self.content
 
+    def save(self, force_insert=False, force_upload=False, using=None, update_fields=None, *args, **kwargs):
+        super(News, self).save(*args, **kwargs)
+
+        if not self.reply:
+            channel_layer = get_channel_layer()
+            payload = {
+                "type": "receive",
+                "key": "additional_news",
+                "actor_name": self.user.username
+            }
+            async_to_sync(channel_layer.group_send)('notifications', payload)
+
     def get_parent(self):
         if self.parent:
             return self.parent
@@ -38,6 +52,7 @@ class News(models.Model):
             self.liked.remove(user)
         else:
             self.liked.add(user)
+            notification_handler(user, self.user, 'L', self, id_value=str(self.uuid_id), key='social_update')
 
     def reply_this(self, user, text):
         parent = self.get_parent()
@@ -47,6 +62,7 @@ class News(models.Model):
             reply=True,
             parent=parent
         )
+        notification_handler(user, parent.user, 'R', parent, id_value=str(parent.uuid_id), key='social_update')
 
     def get_thread(self):
         parent = self.get_parent()
@@ -60,4 +76,5 @@ class News(models.Model):
 
     def get_likers(self):
         return self.liked.all()
+
 

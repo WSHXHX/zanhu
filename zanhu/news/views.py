@@ -80,3 +80,14 @@ def post_comment(request):
         return JsonResponse({"comments": parent.comment_count(), "newsId": parent.get_parent().uuid_id})
     else:
         return HttpResponseBadRequest("评论不能为空")
+
+
+@login_required
+@ajax_required
+@require_http_methods(["POST"])
+def update_interactions(request):
+    """更新互动信息"""
+    data_point = request.POST['id_value']
+    news = News.objects.get(pk=data_point)
+    data = {'likes': news.count_likers(), 'comments': news.comment_count()}
+    return JsonResponse(data)

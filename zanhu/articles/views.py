@@ -2,10 +2,13 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, ListView, UpdateView, DetailView
+from django_comments.signals import comment_was_posted
 
 from zanhu.articles.models import Article
 from zanhu.articles.forms import ArticleForms
 from zanhu.helpers import AuthorRequireMixin
+from zanhu.notifications.views import notification_handler
+
 
 class ArticlesListView(LoginRequiredMixin, ListView):
     model = Article
@@ -60,4 +63,14 @@ class ArticleEditView(LoginRequiredMixin, AuthorRequireMixin, UpdateView):
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse_lazy("articles:article", kwargs={"slug": self.get_object().slug})
+
+def notify_comment(**kwargs):
+    """文章有评论时通知作者"""
+    actor = kwargs['request'].user
+    receiver = kwargs['comment'].content_object.user
+    obj = kwargs['comment'].content_object
+    notification_handler(actor, receiver, 'C', obj)
+
+
+comment_was_posted.connect(receiver=notify_comment)  # 使用django_comments的信号机制
 
