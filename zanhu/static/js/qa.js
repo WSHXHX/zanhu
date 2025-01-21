@@ -16,7 +16,9 @@ $(function () {
                 }
                 throw e;
             }
-        }
+        } else {
+            return document.querySelector('input[name=csrfmiddlewaretoken]').value
+	}
         return null;
     }
 

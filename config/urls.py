@@ -23,6 +23,7 @@ urlpatterns = [
     # ...
     path('markdownx/', include('markdownx.urls')),
     path(r'comments/', include('django_comments.urls')),
+    path('search/', include('haystack.urls')),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]

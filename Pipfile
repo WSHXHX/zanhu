@@ -54,8 +54,11 @@ channels = "*"
 daphne = "*"
 channels-redis = "*"
 tornado = "*"
+whoosh = "*"
+django-haystack = "*"
+elasticsearch = "==2.4.1"
 
 [dev-packages]
 
 [requires]
-python_version = "2.7"
+python_version = "3.10"

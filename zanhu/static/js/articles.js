@@ -7,7 +7,7 @@ $(function () {
     $(".update").click(function () {
         $("input[name='status']").val("P");
         //$("input[name='edited']").prop("checked");
-        $("input[name='edited']").val("True");
+        $("input[name='edited']").val("true");
         $("#article-form").submit();
     });
 

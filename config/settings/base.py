@@ -95,6 +95,7 @@ THIRD_PARTY_APPS = [
     "taggit",
     "markdownx",
     "django_comments",
+    "haystack",
 ]
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 LOCAL_APPS = [
@@ -103,7 +104,8 @@ LOCAL_APPS = [
     "zanhu.articles",
     "zanhu.qa",
     "zanhu.messager",
-    "zanhu.notifications"
+    "zanhu.notifications",
+    "zanhu.search"
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -347,5 +349,17 @@ CHANNEL_LAYERS = {
         },
     }
 }
-
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        # 使用Elasticsearch搜索引擎
+        'ENGINE': 'haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine',
+        # Elasticsearch连接的地址
+        'URL': 'http://127.0.0.1:9200/',
+        # 默认的索引名
+        'INDEX_NAME': 'zanhu',
+    },
+}
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 20  # 分页
+# 实时信号量处理器，模型类中数据添加、更新、删除时自动更新索引
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
